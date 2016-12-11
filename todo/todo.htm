@@ -1,0 +1,29 @@
+<h2>Todo Module</h2>
+<form id="frm" name="frm" method="post" ng-submit="postTask(data)">
+  <div class="form-group">
+    <label for="task">Task description</label>
+    <input type="text" class="form-control" id="task" name="task" placeholder="Task description" ng-model="data.task">
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th ng-hide="narrow">#</th>
+			<th>Task</th>
+			<th>Option</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="task in tasks" ng-click="(narrow)?completeTaskRow($index):''">
+			<td width="10%" ng-hide="narrow"><input type="checkbox" name="complete" id="complete" ng-model="task.complete" ng-change="completeTask($index)"></td>
+			<td width="70%" ng-class="task.complete?'task-complete':''">{{task.desc}}</td>
+			<td width="20%">
+				<button type="button" class="btn btn-xs btn-danger" ng-click="deleteTask($index)">
+					<i class="glyphicon glyphicon-trash"></i> Delete
+				</button>
+			</td>
+		</tr>
+	</tbody>
+</table>

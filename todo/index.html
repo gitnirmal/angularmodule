@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.9/angular.min.js"></script>
+    <script type="text/javascript">
+
+      var app = angular.module('myApp', []);
+
+      app.controller('todoCtrl', ['$scope', '$window', function($scope, $window){
+
+          $scope.limit = 5;
+
+          $scope.tasks = [];
+
+          $scope.postTask = function(data){
+
+            $scope.tasksLength = function(){
+              var totalLength = 0;
+              if($scope.tasks.length>0){
+                for(var i=0; i<$scope.tasks.length; i++){
+                  if(!$scope.tasks[i].complete){
+                    totalLength++;
+                  }
+                }
+              }
+              return totalLength;
+            }
+
+            if($scope.tasksLength()<5){
+              var tmp = {
+                desc: data.task,
+                complete:false
+              }
+              $scope.tasks.push(tmp);
+              $scope.data.task = '';
+            }
+
+          };
+
+          $scope.completeTask = function(index){
+            $scope.tasks[index].complete = ($scope.tasks[index].complete)?true:false;
+          };
+
+          $scope.deleteTask = function(index){
+            $scope.tasks.splice(index, 1);
+          };
+
+          $scope.completeTaskRow = function(index){
+              $scope.tasks[index].complete = !$scope.tasks[index].complete;
+          };
+
+          angular.element($window).bind('resize', function(){
+            $scope.narrow = ($window.innerWidth <400)?true:false;
+            $scope.$apply();
+          });
+
+
+      }]);
+
+      app.directive('todoDirective', function(){
+        return{
+          templateUrl:'todo.htm',
+          restrict:'AEC'
+        }
+      });
+    
+    </script>
+    <style type="text/css">
+      .task-complete{
+        text-decoration: line-through;
+      }
+    </style>
+
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+  </head>
+  <body ng-app="myApp">
+
+    <div class="container">
+      <div ng-controller="todoCtrl">     
+
+      
+        <todo-directive></todo-directive>
+        
+      </div>
+    </div>
+
+  </body>
+</html>
